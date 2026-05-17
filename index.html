@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,11 +6,13 @@
 <title>VARCONE</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600;700&display=swap');
-  :root { --dark:#0F1923;--mid:#1C2B3A;--card:#162030;--blue:#2D9CDB;--green:#27AE60;--red:#E74C3C;--gold:#F2C94C;--text:#ECF0F1;--muted:#7F8C8D;--border:#2C3E50;--r:14px; }
+  :root{--dark:#0F1923;--mid:#1C2B3A;--card:#162030;--blue:#2D9CDB;--green:#27AE60;--red:#E74C3C;--gold:#F2C94C;--text:#ECF0F1;--muted:#7F8C8D;--border:#2C3E50;--r:14px;}
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
   body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;}
   .screen{display:none;width:100%;max-width:420px;min-height:100vh;flex-direction:column;}
   .screen.active{display:flex;}
+
+  /* LOGIN */
   #login{justify-content:center;align-items:center;padding:40px 24px;gap:32px;}
   .brand{font-family:'Space Mono',monospace;font-size:34px;font-weight:700;letter-spacing:6px;color:var(--gold);text-align:center;text-shadow:0 0 30px rgba(242,201,76,.3);}
   .sub{font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;text-align:center;margin-top:6px;}
@@ -22,6 +23,8 @@
   .btn-gold{width:100%;background:var(--gold);color:var(--dark);border:none;border-radius:10px;font-family:'Space Mono',monospace;font-size:14px;font-weight:700;letter-spacing:2px;padding:16px;cursor:pointer;}
   .btn-gold:active{opacity:.85;transform:scale(.98);}
   .err{color:var(--red);font-size:13px;text-align:center;min-height:18px;}
+
+  /* APP */
   .topbar{background:var(--mid);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
   .topbar .brand{font-size:16px;letter-spacing:4px;}
   .user-pill{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;color:var(--muted);}
@@ -32,32 +35,66 @@
   .tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
   .tab-pane{display:none;padding:20px;}
   .tab-pane.active{display:block;}
+
+  /* TIPO */
   .type-toggle{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
   .type-btn{background:var(--card);border:2px solid var(--border);border-radius:12px;color:var(--muted);font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:2px;padding:20px 12px;cursor:pointer;transition:all .2s;text-align:center;}
   .type-btn.entrada.active{border-color:var(--green);background:rgba(39,174,96,.12);color:var(--green);}
   .type-btn.salida.active{border-color:var(--red);background:rgba(231,76,60,.12);color:var(--red);}
+
+  /* FORM */
   .form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:20px;}
-  .field input.big{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-align:center;}
-  .field input.big[type=number]{font-size:28px;}
-  input::placeholder{color:#3A4A5A;font-size:15px;letter-spacing:1px;font-weight:400;}
+  .field label{display:block;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+
+  /* SEARCH */
+  .search-wrap{position:relative;}
+  .search-input{width:100%;background:var(--mid);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Space Mono',monospace;font-size:16px;font-weight:700;letter-spacing:1px;padding:16px;outline:none;transition:border-color .2s;text-transform:uppercase;}
+  .search-input:focus{border-color:var(--blue);}
+  .search-input::placeholder{color:#3A4A5A;font-size:13px;letter-spacing:1px;font-weight:400;text-transform:none;}
+  .dropdown{position:absolute;top:100%;left:0;right:0;background:var(--mid);border:1px solid var(--blue);border-radius:10px;margin-top:4px;max-height:200px;overflow-y:auto;z-index:100;display:none;}
+  .dropdown.show{display:block;}
+  .drop-item{padding:12px 16px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .15s;}
+  .drop-item:last-child{border-bottom:none;}
+  .drop-item:hover{background:var(--card);}
+  .drop-sku{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--gold);}
+  .drop-desc{font-size:12px;color:var(--muted);margin-top:2px;}
+  .drop-precio{font-size:12px;color:var(--green);margin-top:2px;}
+
+  /* PRODUCTO SELECCIONADO */
+  .prod-selected{background:var(--mid);border:1px solid var(--green);border-radius:10px;padding:14px 16px;display:none;}
+  .prod-selected.show{display:block;}
+  .prod-selected .ps-sku{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--gold);}
+  .prod-selected .ps-desc{font-size:13px;color:var(--text);margin-top:4px;}
+  .prod-selected .ps-precio{font-size:12px;color:var(--green);margin-top:4px;}
+  .prod-selected .ps-clear{float:right;background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;margin-top:-2px;}
+
+  .field input.big{font-family:'Space Mono',monospace;font-size:28px;font-weight:700;text-align:center;padding:18px 16px;}
+  input::placeholder{color:#3A4A5A;}
+
   .btn-submit{width:100%;border:none;border-radius:12px;font-family:'Space Mono',monospace;font-size:15px;font-weight:700;letter-spacing:2px;padding:20px;cursor:pointer;transition:all .2s;}
   .btn-submit.e{background:var(--green);color:#fff;}
   .btn-submit.s{background:var(--red);color:#fff;}
   .btn-submit:disabled{opacity:.5;cursor:not-allowed;}
   .btn-submit:not(:disabled):active{transform:scale(.97);}
+
+  /* HISTORIAL */
   .mov-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;animation:up .25s ease;}
   @keyframes up{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
   .mov-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
   .badge{font-size:10px;font-weight:700;letter-spacing:2px;padding:4px 10px;border-radius:20px;text-transform:uppercase;}
   .badge.e{background:rgba(39,174,96,.2);color:var(--green);}
   .badge.s{background:rgba(231,76,60,.2);color:var(--red);}
-  .mov-sku{font-family:'Space Mono',monospace;font-size:15px;font-weight:700;color:var(--gold);}
-  .mov-meta{font-size:12px;color:var(--muted);margin-top:4px;}
+  .mov-sku{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--gold);}
+  .mov-desc{font-size:12px;color:var(--text);margin-top:3px;}
+  .mov-meta{font-size:11px;color:var(--muted);margin-top:3px;}
   .empty{color:var(--muted);font-size:13px;text-align:center;padding:48px 0;}
+
   .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:#fff;font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:1px;padding:14px 24px;border-radius:40px;transition:transform .3s cubic-bezier(.34,1.56,.64,1);z-index:100;white-space:nowrap;}
   .toast.show{transform:translateX(-50%) translateY(0);}
   .toast.err{background:var(--red);}
   select option{background:var(--mid);}
+  
+  .loading{color:var(--muted);font-size:12px;text-align:center;padding:8px;}
 </style>
 </head>
 <body>
@@ -95,15 +132,25 @@
     <button class="tab-btn active" onclick="tab('nuevo')">+ NUEVO</button>
     <button class="tab-btn" onclick="tab('historial')">HISTORIAL</button>
   </div>
+
   <div class="tab-pane active" id="tab-nuevo">
     <div class="type-toggle">
       <button class="type-btn entrada active" id="btn-e" onclick="setTipo('ENTRADA')">↑ ENTRADA</button>
-      <button class="type-btn salida"         id="btn-s" onclick="setTipo('SALIDA')">↓ SALIDA</button>
+      <button class="type-btn salida" id="btn-s" onclick="setTipo('SALIDA')">↓ SALIDA</button>
     </div>
     <div class="form-card">
       <div class="field">
-        <label>Código SKU</label>
-        <input class="big" type="text" id="inp-sku" placeholder="Z2121" autocomplete="off" autocorrect="off" spellcheck="false">
+        <label>Buscar producto</label>
+        <div class="search-wrap">
+          <input class="search-input" type="text" id="inp-search" placeholder="Escribí SKU o nombre del producto..." autocomplete="off" autocorrect="off" spellcheck="false" oninput="buscar(this.value)">
+          <div class="dropdown" id="dropdown"></div>
+        </div>
+        <div class="prod-selected" id="prod-selected">
+          <button class="ps-clear" onclick="limpiarProd()">✕</button>
+          <div class="ps-sku" id="ps-sku"></div>
+          <div class="ps-desc" id="ps-desc"></div>
+          <div class="ps-precio" id="ps-precio"></div>
+        </div>
       </div>
       <div class="field">
         <label>Cantidad</label>
@@ -112,6 +159,7 @@
       <button class="btn-submit e" id="btn-ok" onclick="submit()">REGISTRAR ENTRADA</button>
     </div>
   </div>
+
   <div class="tab-pane" id="tab-historial">
     <div id="hist-list"><div class="empty">Sin movimientos aún</div></div>
   </div>
@@ -121,10 +169,13 @@
 
 <script>
 const USERS = { "MAXI": "maxi123", "BAUTI": "bau123" };
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwoaWnr60jqYbcdTzQZ6DenCES2V7xsTZpBXwosj5iXeCEyUwYPwd0ItRBu5c5gSeP7/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwUgnlJweOMRq1hwSq7X4MtWE5DpiFFu4LBVQKzKLu3nIqP0aCVHUjY4hQXTdP_Aigi/exec";
 
 let usuario = null, tipo = "ENTRADA", hist = [];
+let productos = []; // cache de productos del Sheets
+let prodSeleccionado = null;
 
+// ── LOGIN ──
 function doLogin() {
   const u = document.getElementById("sel-user").value;
   const p = document.getElementById("inp-pass").value;
@@ -135,7 +186,8 @@ function doLogin() {
   usuario = u;
   document.getElementById("cur-user").textContent = u;
   show("app");
-  setTimeout(() => document.getElementById("inp-sku").focus(), 300);
+  cargarProductos();
+  setTimeout(() => document.getElementById("inp-search").focus(), 300);
 }
 
 function doLogout() {
@@ -145,6 +197,59 @@ function doLogout() {
   show("login");
 }
 
+// ── CARGAR PRODUCTOS DESDE SHEETS ──
+async function cargarProductos() {
+  try {
+    const res = await fetch(SCRIPT_URL + "?action=getProductos");
+    const data = await res.json();
+    if (data.productos) productos = data.productos;
+  } catch(e) {
+    console.warn("No se pudieron cargar productos:", e);
+  }
+}
+
+// ── BÚSQUEDA ──
+function buscar(q) {
+  const dd = document.getElementById("dropdown");
+  if (!q || q.length < 1) { dd.classList.remove("show"); return; }
+
+  const ql = q.toLowerCase();
+  const results = productos.filter(p =>
+    p.sku.toLowerCase().includes(ql) || p.desc.toLowerCase().includes(ql)
+  ).slice(0, 8);
+
+  if (!results.length) {
+    dd.innerHTML = '<div class="loading">Sin resultados</div>';
+  } else {
+    dd.innerHTML = results.map(p => `
+      <div class="drop-item" onclick="seleccionar('${p.sku}','${p.desc.replace(/'/g,"\\'")}',${p.precio})">
+        <div class="drop-sku">${p.sku}</div>
+        <div class="drop-desc">${p.desc}</div>
+        <div class="drop-precio">$${Number(p.precio).toLocaleString("es-AR",{minimumFractionDigits:2})}</div>
+      </div>`).join("");
+  }
+  dd.classList.add("show");
+}
+
+function seleccionar(sku, desc, precio) {
+  prodSeleccionado = { sku, desc, precio };
+  document.getElementById("inp-search").value = "";
+  document.getElementById("dropdown").classList.remove("show");
+  document.getElementById("ps-sku").textContent = sku;
+  document.getElementById("ps-desc").textContent = desc;
+  document.getElementById("ps-precio").textContent = "$" + Number(precio).toLocaleString("es-AR",{minimumFractionDigits:2});
+  document.getElementById("prod-selected").classList.add("show");
+  setTimeout(() => document.getElementById("inp-cant").focus(), 100);
+}
+
+function limpiarProd() {
+  prodSeleccionado = null;
+  document.getElementById("prod-selected").classList.remove("show");
+  document.getElementById("inp-search").value = "";
+  document.getElementById("inp-search").focus();
+}
+
+// ── TIPO ──
 function setTipo(t) {
   tipo = t;
   document.getElementById("btn-e").classList.toggle("active", t==="ENTRADA");
@@ -154,32 +259,32 @@ function setTipo(t) {
   btn.className = "btn-submit " + (t==="ENTRADA" ? "e" : "s");
 }
 
+// ── SUBMIT ──
 async function submit() {
-  const sku  = document.getElementById("inp-sku").value.trim().toUpperCase();
+  if (!prodSeleccionado) { toast("Seleccioná un producto.", true); return; }
   const cant = parseInt(document.getElementById("inp-cant").value);
-  if (!sku)            { toast("Ingresá el código SKU.", true); return; }
-  if (!cant || cant<1) { toast("Ingresá una cantidad válida.", true); return; }
+  if (!cant || cant < 1) { toast("Ingresá una cantidad válida.", true); return; }
 
   const now   = new Date();
   const fecha = now.toLocaleDateString("es-AR");
   const hora  = now.toLocaleTimeString("es-AR", {hour:"2-digit", minute:"2-digit"});
+  const { sku, desc, precio } = prodSeleccionado;
 
   const btn = document.getElementById("btn-ok");
   btn.disabled = true;
   btn.textContent = "ENVIANDO...";
 
   try {
-    const params = new URLSearchParams({ fecha, hora, tipo, sku, cant, usuario });
+    const params = new URLSearchParams({ action:"registrar", fecha, hora, tipo, sku, cant, usuario });
     const res = await fetch(SCRIPT_URL + "?" + params.toString());
     const data = await res.json();
 
     if (data.ok) {
-      hist.unshift({ fecha, hora, tipo, sku, cant, usuario });
+      hist.unshift({ fecha, hora, tipo, sku, desc, cant, precio, usuario });
       renderHist();
-      document.getElementById("inp-sku").value = "";
+      limpiarProd();
       document.getElementById("inp-cant").value = "";
-      document.getElementById("inp-sku").focus();
-      toast(tipo==="ENTRADA" ? "✓ Entrada registrada en Sheets" : "✓ Salida registrada en Sheets");
+      toast(tipo==="ENTRADA" ? "✓ Entrada registrada" : "✓ Salida registrada");
     } else {
       toast("Error: " + (data.error || "desconocido"), true);
     }
@@ -191,6 +296,7 @@ async function submit() {
   }
 }
 
+// ── HISTORIAL ──
 function renderHist() {
   const el = document.getElementById("hist-list");
   if (!hist.length) { el.innerHTML='<div class="empty">Sin movimientos aún</div>'; return; }
@@ -200,6 +306,7 @@ function renderHist() {
         <span class="badge ${m.tipo==="ENTRADA"?"e":"s"}">${m.tipo}</span>
         <span class="mov-sku">${m.sku}</span>
       </div>
+      <div class="mov-desc">${m.desc}</div>
       <div class="mov-meta">Cantidad: <strong style="color:var(--text)">${m.cant}</strong> · ${m.fecha} ${m.hora} · ${m.usuario}</div>
     </div>`).join("");
 }
@@ -220,6 +327,11 @@ function toast(msg, isErr=false) {
   t.classList.add("show");
   setTimeout(()=>t.classList.remove("show"), 2800);
 }
+
+// Cerrar dropdown al tocar fuera
+document.addEventListener("click", e => {
+  if (!e.target.closest(".search-wrap")) document.getElementById("dropdown").classList.remove("show");
+});
 
 document.getElementById("inp-pass").addEventListener("keydown", e => { if(e.key==="Enter") doLogin(); });
 document.getElementById("inp-cant").addEventListener("keydown", e => { if(e.key==="Enter") submit(); });
