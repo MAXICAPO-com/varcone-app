@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -120,7 +121,7 @@
 
 <script>
 const USERS = { "MAXI": "maxi123", "BAUTI": "bau123" };
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwHWtemI-qY5t_olCp80bQCaNwuG1Leyivzw6XaG4FgsHSF_ujZKCohzlCNvxG3iR34RA/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwoaWnr60jqYbcdTzQZ6DenCES2V7xsTZpBXwosj5iXeCEyUwYPwd0ItRBu5c5gSeP7/exec";
 
 let usuario = null, tipo = "ENTRADA", hist = [];
 
@@ -156,10 +157,10 @@ function setTipo(t) {
 async function submit() {
   const sku  = document.getElementById("inp-sku").value.trim().toUpperCase();
   const cant = parseInt(document.getElementById("inp-cant").value);
-  if (!sku)           { toast("Ingresá el código SKU.", true); return; }
-  if (!cant || cant<1){ toast("Ingresá una cantidad válida.", true); return; }
+  if (!sku)            { toast("Ingresá el código SKU.", true); return; }
+  if (!cant || cant<1) { toast("Ingresá una cantidad válida.", true); return; }
 
-  const now = new Date();
+  const now   = new Date();
   const fecha = now.toLocaleDateString("es-AR");
   const hora  = now.toLocaleTimeString("es-AR", {hour:"2-digit", minute:"2-digit"});
 
@@ -169,15 +170,19 @@ async function submit() {
 
   try {
     const params = new URLSearchParams({ fecha, hora, tipo, sku, cant, usuario });
-    const url = SCRIPT_URL + "?" + params.toString();
-    await fetch(url, { method: "GET", mode: "no-cors" });
+    const res = await fetch(SCRIPT_URL + "?" + params.toString());
+    const data = await res.json();
 
-    hist.unshift({ fecha, hora, tipo, sku, cant, usuario });
-    renderHist();
-    document.getElementById("inp-sku").value = "";
-    document.getElementById("inp-cant").value = "";
-    document.getElementById("inp-sku").focus();
-    toast(tipo==="ENTRADA" ? "✓ Entrada registrada" : "✓ Salida registrada");
+    if (data.ok) {
+      hist.unshift({ fecha, hora, tipo, sku, cant, usuario });
+      renderHist();
+      document.getElementById("inp-sku").value = "";
+      document.getElementById("inp-cant").value = "";
+      document.getElementById("inp-sku").focus();
+      toast(tipo==="ENTRADA" ? "✓ Entrada registrada en Sheets" : "✓ Salida registrada en Sheets");
+    } else {
+      toast("Error: " + (data.error || "desconocido"), true);
+    }
   } catch(e) {
     toast("Error de conexión.", true);
   } finally {
